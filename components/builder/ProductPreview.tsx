@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TProduct } from '@/types/builder';
-import { MapPin, ShoppingCart, Star, Box, Zap, Info } from 'lucide-react';
+import { MapPin, ShoppingCart, Box, Zap, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
 

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Code, Upload, X } from 'lucide-react';
 import { IProductActions, TProduct } from '@/types/builder';
 import { toast } from 'sonner';
+import Image from "next/image";
 
 type FilterType = 'main' | 'logistics' | 'seo' | 'others';
 
@@ -101,7 +102,7 @@ const ProductConstructorTabs: FC<ProductConstructorTabsProps> = ({
                 key={i}
                 className="group relative aspect-square overflow-hidden rounded-2xl border border-[#F1F5F9] bg-white shadow-sm"
               >
-                <img src={url} className="h-full w-full object-cover" alt="" />
+                <Image src={url} width={300} height={300} alt="photo_draft"  />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                   <button
                     onClick={() =>
