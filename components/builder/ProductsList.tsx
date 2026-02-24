@@ -26,17 +26,8 @@ const ProductsList: FC<ProductsListProps> = ({
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const ITEMS_PER_PAGE = 5;
-
-  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentItems = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-  if (currentPage > totalPages && totalPages > 0) {
-    setCurrentPage(totalPages);
-  }
+  const { currentItems, currentPage, totalPages, setCurrentPage } =
+    useProductsListPagination(products);
 
   const handleCreate = ({ name, value }: { name: string; value: string }) => {
     if (!name) return toast.error('Введите название');
@@ -126,51 +117,12 @@ const ProductsList: FC<ProductsListProps> = ({
         )}
       </div>
 
-      {totalPages > 1 && (
-        <div className="mt-auto shrink-0 border-t border-slate-100 bg-white pt-4">
-          <div className="flex items-center justify-between px-2 pb-3">
-            <Button
-              variant="outline"
-              size="icon"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              className="h-9 w-9 rounded-xl border-slate-200 bg-white text-slate-600 transition-all hover:bg-blue-50 hover:text-blue-600 disabled:opacity-20"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-
-            <div className="flex flex-col items-center">
-              <span className="text-[10px] leading-none font-black tracking-[0.2em] text-slate-900 uppercase">
-                {currentPage} / {totalPages}
-              </span>
-            </div>
-
-            <Button
-              variant="outline"
-              size="icon"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              className="h-9 w-9 rounded-xl border-slate-200 bg-white text-slate-600 transition-all hover:bg-blue-50 hover:text-blue-600 disabled:opacity-20"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex justify-center gap-1.5 pb-2">
-            {[...Array(totalPages)].map((_, i) => (
-              <div
-                key={i}
-                className={cn(
-                  'h-1 rounded-full transition-all duration-500',
-                  currentPage === i + 1
-                    ? 'w-6 bg-[#2563EB]'
-                    : 'w-1.5 bg-slate-100'
-                )}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      <ProductsListPagination
+        onPageNext={() => setCurrentPage((prev) => prev + 1)}
+        onPagePrev={() => setCurrentPage((prev) => prev - 1)}
+        currentPage={currentPage}
+        totalPages={totalPages}
+      />
     </aside>
   );
 };
