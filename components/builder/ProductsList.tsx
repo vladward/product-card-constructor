@@ -1,11 +1,12 @@
-import { FC, useState, useEffect } from 'react';
-import { Box, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react';
+import { FC, useState } from 'react';
+import { Box, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { TProduct } from '@/types/builder';
 import { AddProductDialog } from './AddProductDialog';
+import { ProductListItem } from '@/components/builder/ProductListItem';
+import { useProductsListPagination } from '@/hooks/useProductsListPagination';
+import { ProductsListPagination } from '@/components/builder/ProductsListPagination';
 
 type ProductsListProps = {
   products: TProduct[];
@@ -16,7 +17,7 @@ type ProductsListProps = {
   addProduct: (name: string, price: number) => void;
 };
 
-const ProductsList: FC<ProductsListProps> = ({
+export const ProductsList: FC<ProductsListProps> = ({
   products,
   currentId,
   addProduct,
@@ -36,7 +37,7 @@ const ProductsList: FC<ProductsListProps> = ({
     toast.success('Товар создан');
   };
   return (
-    <aside className="sticky top-24 col-span-3 flex h-[650px] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white/50 p-5 shadow-sm transition-all">
+    <aside className="sticky top-24 col-span-3 flex h-[750px] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white/50 p-5 shadow-sm transition-all">
       <div className="mb-6 flex shrink-0 flex-col gap-3 px-1">
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -77,42 +78,13 @@ const ProductsList: FC<ProductsListProps> = ({
           </div>
         ) : (
           currentItems.map((item) => (
-            <div key={item.id} className="group relative">
-              <button
-                onClick={() => selectProduct(item.id)}
-                className={cn(
-                  'relative w-full overflow-hidden rounded-[1.25rem] border-2 p-4 text-left transition-all',
-                  currentId === item.id
-                    ? 'z-10 scale-[1.01] border-[#2563EB] bg-white shadow-lg ring-4 shadow-blue-50 ring-blue-500/5'
-                    : 'border-[#F1F5F9] bg-white hover:border-[#3B82F6]'
-                )}
-              >
-                <p
-                  className={cn(
-                    'truncate text-xs font-black transition-colors',
-                    currentId === item.id ? 'text-[#2563EB]' : 'text-[#1E293B]'
-                  )}
-                >
-                  {item.name || 'Без названия'}
-                </p>
-                <p className="mt-1 font-mono text-[9px] font-bold text-[#94A3B8] uppercase">
-                  ID: {String(item.id).slice(-6)}
-                </p>
-                {currentId === item.id && (
-                  <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-[#2563EB]" />
-                )}
-              </button>
-
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteProduct(item.id);
-                }}
-                className="absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full bg-[#F8FAFC] p-1 text-slate-400 opacity-0 shadow-sm transition-all group-hover:opacity-100 hover:bg-[#EF4444] hover:text-white"
-              >
-                <X className="h-2 w-2" />
-              </Button>
-            </div>
+            <ProductListItem
+              key={item.id}
+              item={item}
+              isSelected={item.id === currentId}
+              onSelect={selectProduct}
+              onRemove={deleteProduct}
+            />
           ))
         )}
       </div>
@@ -126,5 +98,3 @@ const ProductsList: FC<ProductsListProps> = ({
     </aside>
   );
 };
-
-export default ProductsList;
