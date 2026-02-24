@@ -1,34 +1,60 @@
 import { TProduct } from '@/types/builder';
-import { Card } from '@/components/ui/card';
-import { Box, MapPin, Hash } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { FC } from 'react';
 
-export const ProductListItem = ({ product }: { product: TProduct }) => (
-  <Card className="group cursor-pointer border-slate-100 p-4 transition-shadow hover:shadow-md">
-    <div className="flex items-start justify-between">
-      <div className="space-y-1">
-        <h4 className="text-sm font-bold text-slate-800 transition-colors group-hover:text-blue-600">
-          {product.name || 'Без названия'}
-        </h4>
-        <div className="flex items-center gap-3 text-[10px] font-medium text-slate-400">
-          <span className="flex items-center gap-1">
-            <Hash className="h-3 w-3" /> {product.code || 'нет кода'}
-          </span>
-          <span className="flex items-center gap-1 uppercase">
-            <Box className="h-3 w-3" /> {product.type}
-          </span>
-        </div>
-      </div>
-      <div className="text-right">
-        <p className="text-sm leading-none font-black text-slate-900">
-          {product.marketplace_price ? `${product.marketplace_price} ₽` : '—'}
+type ProductListItemType = {
+  item: TProduct;
+  onSelect: (id: number | string) => void;
+  onRemove: (id: number | string) => void;
+  isSelected: boolean;
+};
+
+export const ProductListItem: FC<ProductListItemType> = ({
+  item,
+  onSelect,
+  onRemove,
+  isSelected,
+}) => (
+  <div key={item.id} className="group relative">
+    <div
+      onClick={() => onSelect(item.id)}
+      className={cn(
+        'relative w-full overflow-hidden rounded-[1.25rem] border-2 p-4 text-left transition-all',
+        isSelected
+          ? 'z-10 scale-[1.01] border-[#2563EB] bg-white shadow-lg ring-4 shadow-blue-50 ring-blue-500/5'
+          : 'border-[#F1F5F9] bg-white hover:border-[#3B82F6]'
+      )}
+    >
+      <div className="flex items-center justify-between gap-1">
+        <p
+          className={cn(
+            'truncate text-xs font-black transition-colors',
+            isSelected ? 'text-[#2563EB]' : 'text-[#1E293B]'
+          )}
+        >
+          {item.name || 'Без названия'}
         </p>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(item.id);
+          }}
+          className="h-8 w-8 cursor-pointer rounded-full text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500"
+          title="Удалить все"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
       </div>
+      <p className="mt-1 font-mono text-[9px] font-bold text-[#94A3B8] uppercase">
+        ID: {String(item.id).slice(-6)}
+      </p>
+      {isSelected && (
+        <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-[#2563EB]" />
+      )}
     </div>
-    {product.address && (
-      <div className="mt-3 line-clamp-1 flex items-center gap-1.5 border-t border-slate-50 pt-3 text-[10px] text-slate-500 italic">
-        <MapPin className="h-3 w-3 text-slate-300" />
-        {product.address}
-      </div>
-    )}
-  </Card>
+  </div>
 );

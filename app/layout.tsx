@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { Toaster } from 'sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -48,6 +49,7 @@ export default function RootLayout({
           </div>
         </nav>
         {children}
+        <Toaster position="top-right" richColors />
         <footer className="border-t py-10 text-center text-[10px] tracking-[0.2em] text-slate-400 uppercase">
           © 2026{' '}
           <Link className="text-blue-300" href="https://github.com/vladward">
