@@ -1,19 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Box, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { TProduct } from '@/types/builder';
+import { AddProductDialog } from './AddProductDialog';
 
 type ProductsListProps = {
   products: TProduct[];
@@ -33,8 +25,7 @@ const ProductsList: FC<ProductsListProps> = ({
   clearAll,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newPrice, setNewPrice] = useState('');
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const ITEMS_PER_PAGE = 5;
@@ -47,16 +38,14 @@ const ProductsList: FC<ProductsListProps> = ({
     setCurrentPage(totalPages);
   }
 
-  const handleCreate = () => {
-    if (!newName) return toast.error('Введите название');
-    addProduct(newName, Number(newPrice));
+  const handleCreate = ({ name, value }: { name: string; value: string }) => {
+    if (!name) return toast.error('Введите название');
+    addProduct(name, Number(value));
     setIsDialogOpen(false);
-    setNewName('');
-    setNewPrice('');
     toast.success('Товар создан');
   };
   return (
-    <aside className="sticky top-24 col-span-3 flex h-[780px] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white/50 p-3 shadow-sm transition-all">
+    <aside className="sticky top-24 col-span-3 flex h-[650px] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white/50 p-5 shadow-sm transition-all">
       <div className="mb-6 flex shrink-0 flex-col gap-3 px-1">
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -72,7 +61,7 @@ const ProductsList: FC<ProductsListProps> = ({
               variant="ghost"
               size="icon"
               onClick={clearAll}
-              className="h-8 w-8 rounded-full text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500"
+              className="h-8 w-8 cursor-pointer rounded-full text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500"
               title="Удалить все"
             >
               <Trash2 className="h-4 w-4" />
@@ -80,53 +69,11 @@ const ProductsList: FC<ProductsListProps> = ({
           )}
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="h-12 w-full rounded-2xl bg-[#2563EB] font-bold text-white shadow-lg shadow-blue-100 transition-all hover:bg-[#1D4ED8] active:scale-[0.98]">
-              <Plus className="mr-2 h-4 w-4" /> Добавить товар
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="rounded-[2.5rem] border-none bg-white shadow-2xl sm:max-w-[400px]">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-black text-slate-900">
-                Новый черновик
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-5 py-4">
-              <div className="space-y-2">
-                <Label className="ml-1 text-[10px] font-black text-slate-400 uppercase">
-                  Название
-                </Label>
-                <Input
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  placeholder="Напр: iPhone 15 Pro"
-                  className="h-12 rounded-2xl border-slate-100 bg-slate-50 focus-visible:ring-blue-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="ml-1 text-[10px] font-black text-slate-400 uppercase">
-                  Цена
-                </Label>
-                <Input
-                  type="number"
-                  value={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value)}
-                  placeholder="0"
-                  className="h-12 rounded-2xl border-slate-100 bg-slate-50 focus-visible:ring-blue-500"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                onClick={handleCreate}
-                className="h-14 w-full rounded-2xl bg-slate-900 text-xs font-black tracking-widest uppercase transition-all hover:bg-blue-600"
-              >
-                Начать работу
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <AddProductDialog
+          isOpen={isDialogOpen}
+          onOpen={setIsDialogOpen}
+          onCreate={handleCreate}
+        />
       </div>
 
       <div className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
@@ -165,15 +112,15 @@ const ProductsList: FC<ProductsListProps> = ({
                 )}
               </button>
 
-              <button
+              <Button
                 onClick={(e) => {
                   e.stopPropagation();
                   deleteProduct(item.id);
                 }}
-                className="absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full bg-[#F8FAFC] p-2 text-slate-400 opacity-0 shadow-sm transition-all group-hover:opacity-100 hover:bg-[#EF4444] hover:text-white"
+                className="absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full bg-[#F8FAFC] p-1 text-slate-400 opacity-0 shadow-sm transition-all group-hover:opacity-100 hover:bg-[#EF4444] hover:text-white"
               >
-                <X className="h-3 w-3" />
-              </button>
+                <X className="h-2 w-2" />
+              </Button>
             </div>
           ))
         )}
