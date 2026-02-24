@@ -28,6 +28,8 @@ export const AddProductDialog: FC<AddProductDialogType> = ({
 
   const handleCreate = () => {
     onCreate({ name: newName, value: newPrice });
+    setNewName('');
+    setNewPrice('');
   };
 
   return (
@@ -37,7 +39,7 @@ export const AddProductDialog: FC<AddProductDialogType> = ({
           <Plus className="mr-2 h-4 w-4" /> Добавить товар
         </Button>
       </DialogTrigger>
-      <DialogContent className="rounded-[2.5rem] border-none bg-white shadow-2xl sm:max-w-[400px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl font-black text-slate-900">
             Новый товар

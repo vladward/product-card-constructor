@@ -4,7 +4,7 @@ import { useProductBuilder } from '@/hooks/useProductBuilder';
 import { FieldSelector } from './FieldSelector';
 import { ProductPreview } from './ProductPreview';
 import { toast } from 'sonner';
-import ProductsList from '@/components/builder/ProductsList';
+import { ProductsList } from '@/components/builder/ProductsList';
 import EmptyRedactor from '@/components/builder/EmptyRedactor';
 import ProductConstructorTabs from '@/components/builder/ProductConstructorTabs';
 
