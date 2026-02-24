@@ -89,13 +89,13 @@ export const useProductBuilder = () => {
         }
         return next;
       });
-      toast.error('Товар удален из списка');
+      toast.success('Товар удален из списка');
     },
 
     clearAll: () => {
       setProducts([]);
       setCurrentId('');
-      toast.error('Список полностью очищен', {
+      toast.success('Список полностью очищен', {
         description: 'Все черновики были удалены',
         duration: 3000,
       });
