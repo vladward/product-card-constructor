@@ -2,29 +2,28 @@ import { FC, useState } from 'react';
 import { Box, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { TProduct } from '@/types/builder';
+import {
+  IProductActions,
+  TProduct,
+} from '@/modules/product-builder/types/builder';
 import { AddProductDialog } from './AddProductDialog';
-import { ProductListItem } from '@/components/builder/ProductListItem';
-import { useProductsListPagination } from '@/hooks/useProductsListPagination';
-import { ProductsListPagination } from '@/components/builder/ProductsListPagination';
+import { ProductListItem } from '@/modules/product-builder/ui/list/ProductListItem';
+import { useProductsListPagination } from '@/modules/product-builder/hooks/useProductsListPagination';
+import { ProductsListPagination } from '@/modules/product-builder/ui/list/ProductsListPagination';
 
 type ProductsListProps = {
   products: TProduct[];
   currentId: string | number;
-  clearAll: () => void;
-  selectProduct: (id: number | string) => void;
-  deleteProduct: (id: number | string) => void;
-  addProduct: (name: string, price: number) => void;
+  actions: IProductActions;
 };
 
-export const ProductsList: FC<ProductsListProps> = ({
+export const ProductsList = ({
   products,
   currentId,
-  addProduct,
-  deleteProduct,
-  selectProduct,
-  clearAll,
-}) => {
+  actions,
+}: ProductsListProps) => {
+  const { addProduct, selectProduct, clearAll, deleteProduct } = actions;
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { currentItems, currentPage, totalPages, setCurrentPage } =

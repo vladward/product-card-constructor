@@ -1,3 +1,6 @@
+import { ChangeEvent } from 'react';
+import { TAB_CONFIG } from '@/modules/product-builder/lib/constants';
+
 export type TProduct = {
   id: number;
   name: string;
@@ -39,7 +42,7 @@ export type TProduct = {
 };
 
 export interface IProductActions {
-  updateField: (key: keyof TProduct, val: any) => void;
+  updateField: (key: keyof TProduct, val: string | number | string[]) => void;
   updatePhotos: (urls: string[]) => void;
   toggleField: (key: keyof TProduct) => void;
   addProduct: (name: string, price: number) => void;
@@ -48,4 +51,7 @@ export interface IProductActions {
   clearAll: () => void;
   reset: () => void;
   generateAI: () => Promise<void>;
+  uploadPhotos: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+export type BuilderFilterType = (typeof TAB_CONFIG)[number]['id'];

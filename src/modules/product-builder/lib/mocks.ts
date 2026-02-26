@@ -1,4 +1,4 @@
-import { TProduct } from '@/types/builder';
+import { TProduct } from '@/modules/product-builder/types/builder';
 
 export const MOCK_PRODUCTS: TProduct[] = [
   {

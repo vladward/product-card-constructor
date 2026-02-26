@@ -1,9 +1,10 @@
 import { Skeleton } from '@/components/ui/skeleton';
+import { SKELETON_PRODUCT_ITEMS_COUNT } from '@/modules/product-builder/lib/constants';
 
-export const ConstructorSkeleton = () => (
-  <div className="grid animate-pulse grid-cols-12 gap-8">
-    <div className="col-span-3 space-y-4">
-      {[1, 2, 3].map((i) => (
+export const BuilderSkeleton = () => (
+  <div className="grid animate-pulse grid-cols-1 gap-8 md:grid-cols-12">
+    <div className="col-span-3 hidden space-y-4 md:col-span-3 md:block">
+      {Array.from({ length: SKELETON_PRODUCT_ITEMS_COUNT }).map((_, i) => (
         <Skeleton key={i} className="h-20 w-full rounded-xl" />
       ))}
     </div>

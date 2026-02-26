@@ -1,11 +1,10 @@
 import { Suspense } from 'react';
-import ProductConstructor from '@/components/builder/ProductConstructor';
-import { ConstructorSkeleton } from '@/components/builder/BuilderSkeleton';
+import { BuilderSkeleton, ProductConstructor } from '@/modules/product-builder';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      <main className="container mx-auto px-6 py-10">
+    <div className="bg-bg-slate-50 min-h-screen">
+      <section className="container mx-auto px-6 py-10">
         <header className="mb-10 max-w-2xl">
           <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-slate-900">
             Создание новой позиции
@@ -16,10 +15,10 @@ export default function App() {
           </p>
         </header>
 
-        <Suspense fallback={<ConstructorSkeleton />}>
+        <Suspense fallback={<BuilderSkeleton />}>
           <ProductConstructor />
         </Suspense>
-      </main>
+      </section>
     </div>
   );
 }

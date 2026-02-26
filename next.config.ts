@@ -1,14 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/api/tablecrm/:path*',
-        destination: 'https://app.tablecrm.com*', // Проксируем запросы
-      },
-    ];
-  },
+  /* config options here */
 };
 
 export default nextConfig;

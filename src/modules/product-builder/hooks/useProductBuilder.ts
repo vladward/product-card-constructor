@@ -1,8 +1,11 @@
-import { useState, useMemo } from 'react';
-import { IProductActions, TProduct } from '@/types/builder';
-import { MOCK_PRODUCTS } from '@/lib/mocks';
+import { useState, useMemo, ChangeEvent } from 'react';
+import {
+  IProductActions,
+  TProduct,
+} from '@/modules/product-builder/types/builder';
+import { MOCK_PRODUCTS } from '@/modules/product-builder/lib/mocks';
 import { toast } from 'sonner';
-import { FIELD_CATEGORIES } from '@/components/builder/ProductForm';
+import { FIELD_CATEGORIES } from '@/modules/product-builder/lib/constants';
 
 const initialKeys: (keyof TProduct)[] = [
   'name',
@@ -41,22 +44,31 @@ export const useProductBuilder = () => {
   }, [draft, activeKeys]);
 
   const actions: IProductActions = {
-    updateField: (key: keyof TProduct, val: string | number) => {
+    updateField: (key: keyof TProduct, val: string | number | string[]) => {
       setProducts((prev) =>
         prev.map((p) => (p.id === currentId ? { ...p, [key]: val } : p))
       );
     },
 
-    updatePhotos: (urls: string[]) => {
+    updatePhotos: (urls) => {
       setProducts((prev) =>
-        prev.map((p) => (p.id === currentId ? { ...p, photos: urls } : p))
+        prev.map((p) => {
+          if (p.id === currentId) {
+            p.photos?.forEach((url) => {
+              if (url.startsWith('blob:') && !urls.includes(url))
+                URL.revokeObjectURL(url);
+            });
+            return { ...p, photos: urls };
+          }
+          return p;
+        })
       );
     },
 
     toggleField: (key: keyof TProduct) => {
       setActiveKeys((prev) => {
         const next = new Set(prev);
-        if (initialKeys.includes(key)) return prev;
+        // Теперь мы просто переключаем любой ключ без ограничений
         next.has(key) ? next.delete(key) : next.add(key);
         return next;
       });
@@ -91,6 +103,16 @@ export const useProductBuilder = () => {
       });
       toast.success('Товар удален из списка');
     },
+    uploadPhotos: (e: ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length === 0) return;
+
+      const urls = files.map((f) => URL.createObjectURL(f));
+      const currentPhotos =
+        products.find((p) => p.id === currentId)?.photos || [];
+      actions.updatePhotos([...currentPhotos, ...urls]);
+      toast.success(`Добавлено фото: ${files.length} шт.`);
+    },
 
     clearAll: () => {
       setProducts([]);
@@ -119,5 +141,12 @@ export const useProductBuilder = () => {
     },
   };
 
-  return { products, draft, activeKeys, currentId, qualityScore, actions };
+  return {
+    products,
+    draft,
+    activeKeys,
+    currentId,
+    qualityScore,
+    actions,
+  };
 };
