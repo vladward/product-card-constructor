@@ -21,7 +21,7 @@ export const ProductPreview = memo(
     const oldPrice = (price * 1.3).toFixed(0);
 
     return (
-      <Card className="animate-in fade-in zoom-in w-full max-w-[300px] overflow-hidden rounded-[2.5rem] border-none bg-white shadow-2xl duration-500">
+      <Card className="animate-in fade-in zoom-in w-full max-w-[300px] overflow-hidden rounded-[2.5rem] border-none bg-white pt-0 shadow-2xl duration-500">
         <PreviewImage
           photos={isVisible('photos') ? product.photos : []}
           hasCashback={isVisible('chatting_percent')}
@@ -107,8 +107,9 @@ export const ProductPreview = memo(
             </div>
           </div>
 
-          <Button className="h-11 w-full rounded-2xl bg-slate-900 text-xs font-bold transition-all hover:bg-blue-600 active:scale-95">
-            <ShoppingCart className="mr-2 h-4 w-4" /> Добавить
+          <Button className="h-11 w-full gap-2 rounded-2xl bg-slate-900 text-slate-50 shadow-sm transition-all hover:bg-blue-600 active:scale-95 dark:bg-slate-50 dark:text-slate-950 dark:hover:bg-blue-500">
+            <ShoppingCart className="h-4 w-4" />
+            Добавить
           </Button>
         </CardContent>
       </Card>
