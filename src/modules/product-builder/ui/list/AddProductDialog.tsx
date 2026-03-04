@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type AddProductDialogType = {
   isOpen: boolean;
@@ -50,7 +51,12 @@ export const AddProductDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button className="bg-brand-blue shadow-brand-blue/20 h-12 w-full cursor-pointer rounded-2xl border-none font-bold text-white shadow-lg transition-all hover:brightness-110 active:scale-[0.98]">
+        <Button
+          className={cn(
+            'h-9 rounded-xl border-2 px-4 text-[11px] font-semibold transition-all duration-200',
+            'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-100 hover:border-blue-700 hover:bg-blue-700 hover:text-white'
+          )}
+        >
           <Plus className="mr-2 h-4 w-4" /> Добавить товар
         </Button>
       </DialogTrigger>
